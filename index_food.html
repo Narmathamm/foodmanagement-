@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Management System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f7f6;
+    color: #263238;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 240px;
+    height: 100vh;
+    background: #14532d;
+    color: white;
+    padding: 25px 15px;
+}
+
+.logo {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+.logo span {
+    color: #86efac;
+}
+
+.menu button {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 8px;
+    border: none;
+    background: transparent;
+    color: white;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.menu button:hover,
+.menu button.active {
+    background: #166534;
+}
+
+/* MAIN */
+.main {
+    margin-left: 240px;
+    padding: 25px;
+}
+
+.header {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.header h1 {
+    color: #14532d;
+}
+
+.date {
+    color: #666;
+}
+
+/* DASHBOARD CARDS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.stat h3 {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.stat p {
+    font-size: 30px;
+    font-weight: bold;
+    color: #14532d;
+}
+
+/* SECTIONS */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    margin-bottom: 25px;
+}
+
+.panel h2 {
+    color: #14532d;
+    margin-bottom: 18px;
+}
+
+/* FORM */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: #22c55e;
+}
+
+.btn {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-warning {
+    background: #f59e0b;
+    color: white;
+}
+
+.btn-secondary {
+    background: #64748b;
+    color: white;
+}
+
+/* TABLE */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 13px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background: #f0fdf4;
+    color: #14532d;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-good {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-low {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-out {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* SEARCH */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-box input {
+    max-width: 400px;
+}
+
+/* ALERT */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+/* REPORT */
+.report-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.report-card {
+    padding: 25px;
+    background: #f0fdf4;
+    border-radius: 10px;
+}
+
+.report-card h3 {
+    color: #166534;
+    margin-bottom: 10px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 1000px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(max-width: 700px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid,
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="logo">
+        🍎 Food<span>Manager</span>
+    </div>
+
+    <div class="menu">
+        <button class="active" onclick="showSection('dashboard', this)">
+            📊 Dashboard
+        </button>
+
+        <button onclick="showSection('inventory', this)">
+            📦 Food Inventory
+        </button>
+
+        <button onclick="showSection('addFood', this)">
+            ➕ Add Food
+        </button>
+
+        <button onclick="showSection('reports', this)">
+            📈 Reports
+        </button>
+    </div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h1>Food Management System</h1>
+            <p>Manage your food inventory easily</p>
+        </div>
+
+        <div class="date" id="currentDate"></div>
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section active">
+
+        <div class="stats">
+
+            <div class="stat">
+                <h3>Total Food Items</h3>
+                <p id="totalItems">0</p>
+            </div>
+
+            <div class="stat">
+                <h3>Total Stock</h3>
+                <p id="totalStock">0</p>
+            </div>
+
+            <div class="stat">
+                <h3>Low Stock</h3>
+                <p id="lowStock">0</p>
+            </div>
+
+            <div class="stat">
+                <h3>Total Value</h3>
+                <p id="totalValue">₹0</p>
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>⚠️ Stock Alerts</h2>
+
+            <div id="alerts">
+                No low-stock items.
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>🍽️ Recent Food Items</h2>
+
+            <div class="table-container">
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="recentTable"></tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INVENTORY -->
+    <section id="inventory" class="section">
+
+        <div class="panel">
+
+            <h2>📦 Food Inventory</h2>
+
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Search food..."
+                    oninput="displayFoods()"
+                >
+
+                <select id="categoryFilter" onchange="displayFoods()">
+                    <option value="">All Categories</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Fruits">Fruits</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Food Name</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Price</th>
+                            <th>Expiry</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="foodTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADD FOOD -->
+    <section id="addFood" class="section">
+
+        <div class="panel">
+
+            <h2>➕ Add Food Item</h2>
+
+            <form id="foodForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Food Name</label>
+                        <input
+                            type="text"
+                            id="foodName"
+                            placeholder="Example: Rice"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+
+                        <select id="foodCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Grains">Grains</option>
+                            <option value="Vegetables">Vegetables</option>
+                            <option value="Fruits">Fruits</option>
+                            <option value="Dairy">Dairy</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input
+                            type="number"
+                            id="foodQuantity"
+                            min="0"
+                            placeholder="0"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Unit</label>
+
+                        <select id="foodUnit">
+                            <option value="kg">Kg</option>
+                            <option value="g">Gram</option>
+                            <option value="litre">Litre</option>
+                            <option value="ml">ML</option>
+                            <option value="pieces">Pieces</option>
+                            <option value="packets">Packets</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price per Unit (₹)</label>
+
+                        <input
+                            type="number"
+                            id="foodPrice"
+                            min="0"
+                            step="0.01"
+                            placeholder="0"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+
+                        <input
+                            type="date"
+                            id="foodExpiry"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Minimum Stock Level</label>
+
+                        <input
+                            type="number"
+                            id="foodMinimum"
+                            min="0"
+                            value="5"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary">
+                    Add Food
+                </button>
+
+                <button
+                    type="reset"
+                    class="btn btn-secondary"
+                >
+                    Clear
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- REPORTS -->
+    <section id="reports" class="section">
+
+        <div class="panel">
+
+            <h2>📈 Food Reports</h2>
+
+            <div class="report-grid">
+
+                <div class="report-card">
+                    <h3>Total Inventory Value</h3>
+                    <p id="reportValue">₹0</p>
+                </div>
+
+                <div class="report-card">
+                    <h3>Total Items</h3>
+                    <p id="reportItems">0</p>
+                </div>
+
+                <div class="report-card">
+                    <h3>Available Stock</h3>
+                    <p id="reportStock">0</p>
+                </div>
+
+                <div class="report-card">
+                    <h3>Low Stock Items</h3>
+                    <p id="reportLow">0</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <h2>Category Summary</h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Number of Items</th>
+                            <th>Total Quantity</th>
+                            <th>Total Value</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="categoryTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+/* =========================
+   INITIAL FOOD DATA
+========================= */
+
+let foods = JSON.parse(localStorage.getItem("foodInventory")) || [
+    {
+        id: 1,
+        name: "Rice",
+        category: "Grains",
+        quantity: 50,
+        unit: "kg",
+        price: 60,
+        expiry: "2027-01-20",
+        minimum: 10
+    },
+
+    {
+        id: 2,
+        name: "Tomato",
+        category: "Vegetables",
+        quantity: 25,
+        unit: "kg",
+        price: 40,
+        expiry: "2026-09-15",
+        minimum: 8
+    },
+
+    {
+        id: 3,
+        name: "Milk",
+        category: "Dairy",
+        quantity: 30,
+        unit: "litre",
+        price: 55,
+        expiry: "2026-09-10",
+        minimum: 10
+    },
+
+    {
+        id: 4,
+        name: "Apple",
+        category: "Fruits",
+        quantity: 4,
+        unit: "kg",
+        price: 120,
+        expiry: "2026-09-12",
+        minimum: 5
+    }
+];
+
+
+/* =========================
+   SAVE DATA
+========================= */
+
+function saveData() {
+    localStorage.setItem(
+        "foodInventory",
+        JSON.stringify(foods)
+    );
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(sectionId, button) {
+
+    document.querySelectorAll(".section")
+        .forEach(section => {
+            section.classList.remove("active");
+        });
+
+    document.getElementById(sectionId)
+        .classList.add("active");
+
+    document.querySelectorAll(".menu button")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    button.classList.add("active");
+
+    updateDashboard();
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function getStatus(food) {
+
+    if (food.quantity <= 0) {
+        return {
+            text: "Out of Stock",
+            class: "badge-out"
+        };
+    }
+
+    if (food.quantity <= food.minimum) {
+        return {
+            text: "Low Stock",
+            class: "badge-low"
+        };
+    }
+
+    return {
+        text: "Available",
+        class: "badge-good"
+    };
+}
+
+
+/* =========================
+   DISPLAY FOODS
+========================= */
+
+function displayFoods() {
+
+    const table = document.getElementById("foodTable");
+
+    const search =
+        document.getElementById("search").value
+        .toLowerCase();
+
+    const category =
+        document.getElementById("categoryFilter").value;
+
+    let filtered = foods.filter(food => {
+
+        const matchesSearch =
+            food.name.toLowerCase()
+            .includes(search);
+
+        const matchesCategory =
+            category === "" ||
+            food.category === category;
+
+        return matchesSearch && matchesCategory;
+    });
+
+    table.innerHTML = "";
+
+    if (filtered.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align:center">
+                    No food items found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    filtered.forEach(food => {
+
+        const status = getStatus(food);
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td><strong>${food.name}</strong></td>
+
+                <td>${food.category}</td>
+
+                <td>${food.quantity}</td>
+
+                <td>${food.unit}</td>
+
+                <td>₹${food.price.toFixed(2)}</td>
+
+                <td>${food.expiry}</td>
+
+                <td>
+                    <span class="badge ${status.class}">
+                        ${status.text}
+                    </span>
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-warning"
+                        onclick="increaseStock(${food.id})"
+                    >
+                        + Stock
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="deleteFood(${food.id})"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+        `;
+    });
+}
+
+
+/* =========================
+   ADD FOOD
+========================= */
+
+document.getElementById("foodForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const food = {
+
+        id: Date.now(),
+
+        name:
+            document.getElementById("foodName").value,
+
+        category:
+            document.getElementById("foodCategory").value,
+
+        quantity:
+            Number(
+                document.getElementById("foodQuantity").value
+            ),
+
+        unit:
+            document.getElementById("foodUnit").value,
+
+        price:
+            Number(
+                document.getElementById("foodPrice").value
+            ),
+
+        expiry:
+            document.getElementById("foodExpiry").value,
+
+        minimum:
+            Number(
+                document.getElementById("foodMinimum").value
+            )
+    };
+
+    foods.push(food);
+
+    saveData();
+
+    this.reset();
+
+    alert("Food item added successfully!");
+
+    updateDashboard();
+
+    displayFoods();
+
+    showSection(
+        "inventory",
+        document.querySelectorAll(".menu button")[1]
+    );
+});
+
+
+/* =========================
+   DELETE FOOD
+========================= */
+
+function deleteFood(id) {
+
+    const food = foods.find(item => item.id === id);
+
+    if (!food) return;
+
+    if (
+        confirm(
+            `Delete "${food.name}" from inventory?`
+        )
+    ) {
+
+        foods = foods.filter(
+            item => item.id !== id
+        );
+
+        saveData();
+
+        updateDashboard();
+
+        displayFoods();
+    }
+}
+
+
+/* =========================
+   INCREASE STOCK
+========================= */
+
+function increaseStock(id) {
+
+    const amount = prompt(
+        "Enter quantity to add:"
+    );
+
+    if (amount === null) return;
+
+    const quantity = Number(amount);
+
+    if (
+        isNaN(quantity) ||
+        quantity <= 0
+    ) {
+
+        alert("Please enter a valid quantity.");
+
+        return;
+    }
+
+    const food =
+        foods.find(item => item.id === id);
+
+    if (food) {
+
+        food.quantity += quantity;
+
+        saveData();
+
+        updateDashboard();
+
+        displayFoods();
+    }
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard() {
+
+    const totalItems = foods.length;
+
+    const totalStock =
+        foods.reduce(
+            (sum, food) =>
+                sum + Number(food.quantity),
+            0
+        );
+
+    const lowStock =
+        foods.filter(
+            food =>
+                food.quantity <= food.minimum
+        ).length;
+
+    const totalValue =
+        foods.reduce(
+            (sum, food) =>
+                sum +
+                Number(food.quantity) *
+                Number(food.price),
+            0
+        );
+
+    document.getElementById("totalItems")
+        .textContent = totalItems;
+
+    document.getElementById("totalStock")
+        .textContent = totalStock;
+
+    document.getElementById("lowStock")
+        .textContent = lowStock;
+
+    document.getElementById("totalValue")
+        .textContent =
+        "₹" + totalValue.toFixed(2);
+
+
+    /* ALERTS */
+
+    const alerts =
+        document.getElementById("alerts");
+
+    const lowFoods =
+        foods.filter(
+            food =>
+                food.quantity <= food.minimum
+        );
+
+    if (lowFoods.length === 0) {
+
+        alerts.innerHTML =
+            "✅ All food items have sufficient stock.";
+
+    } else {
+
+        alerts.innerHTML =
+            lowFoods.map(food => `
+                <div class="alert">
+                    ⚠️ <strong>${food.name}</strong>
+                    is low on stock.
+                    Available: ${food.quantity}
+                    ${food.unit}
+                </div>
+            `).join("");
+    }
+
+
+    /* RECENT ITEMS */
+
+    const recent =
+        document.getElementById("recentTable");
+
+    recent.innerHTML = "";
+
+    foods.slice(-5).reverse().forEach(food => {
+
+        const status = getStatus(food);
+
+        recent.innerHTML += `
+            <tr>
+
+                <td>${food.name}</td>
+
+                <td>${food.category}</td>
+
+                <td>
+                    ${food.quantity}
+                    ${food.unit}
+                </td>
+
+                <td>
+                    <span class="badge ${status.class}">
+                        ${status.text}
+                    </span>
+                </td>
+
+            </tr>
+        `;
+    });
+
+
+    /* REPORT */
+
+    document.getElementById("reportValue")
+        .textContent =
+        "₹" + totalValue.toFixed(2);
+
+    document.getElementById("reportItems")
+        .textContent = totalItems;
+
+    document.getElementById("reportStock")
+        .textContent = totalStock;
+
+    document.getElementById("reportLow")
+        .textContent = lowStock;
+
+    generateCategoryReport();
+}
+
+
+/* =========================
+   CATEGORY REPORT
+========================= */
+
+function generateCategoryReport() {
+
+    const categories = {};
+
+    foods.forEach(food => {
+
+        if (!categories[food.category]) {
+
+            categories[food.category] = {
+                items: 0,
+                quantity: 0,
+                value: 0
+            };
+        }
+
+        categories[food.category].items++;
+
+        categories[food.category].quantity +=
+            Number(food.quantity);
+
+        categories[food.category].value +=
+            Number(food.quantity) *
+            Number(food.price);
+    });
+
+    const table =
+        document.getElementById("categoryTable");
+
+    table.innerHTML = "";
+
+    Object.keys(categories).forEach(category => {
+
+        const data = categories[category];
+
+        table.innerHTML += `
+            <tr>
+
+                <td>${category}</td>
+
+                <td>${data.items}</td>
+
+                <td>${data.quantity}</td>
+
+                <td>₹${data.value.toFixed(2)}</td>
+
+            </tr>
+        `;
+    });
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+document.getElementById("currentDate")
+.textContent =
+    new Date().toLocaleDateString(
+        "en-IN",
+        {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+updateDashboard();
+displayFoods();
+
+</script>
+
+</body>
+</html>
